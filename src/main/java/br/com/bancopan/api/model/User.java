@@ -6,20 +6,24 @@ public class User {
 	private Long cpf;
 	private Long idade;
 	private String estadoCivil;
-	private String endereço;
+	private String endereco;
 	private Long numero;
 	private Long telefone;
 	
 	
-	public User(String nome, Long cpf, Long idade, String estadoCivil, String endereço, Long numero, Long telefone) {
+	public User(String nome, Long cpf, Long idade, String estadoCivil, String endereco, Long numero, Long telefone) {
 		super();
 		this.nome = nome;
 		this.cpf = cpf;
 		this.idade = idade;
 		this.estadoCivil = estadoCivil;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.numero = numero;
 		this.telefone = telefone;
+	}
+	
+	public User(){
+		super();
 	}
 	
 	public String getNome() {
@@ -47,10 +51,10 @@ public class User {
 		this.estadoCivil = estadoCivil;
 	}
 	public String getEndereço() {
-		return endereço;
+		return endereco;
 	}
-	public void setEndereço(String endereço) {
-		this.endereço = endereço;
+	public void setEndereço(String endereco) {
+		this.endereco = endereco;
 	}
 	public Long getNumero() {
 		return numero;

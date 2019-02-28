@@ -12,6 +12,10 @@ public class EstadoMunicipio {
 		this.listaMunicipios = lista;
 	}
 	
+	public EstadoMunicipio() {
+		super();
+	}
+	
 	public Long getIdEstado() {
 		return idEstado;
 	}

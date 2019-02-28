@@ -10,6 +10,10 @@ public class Municipios {
 		this.nome = nome;
 	}
 	
+	public Municipios() {
+		super();
+	}
+	
 	public Long getId() {
 		return id;
 	}

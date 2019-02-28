@@ -11,6 +11,10 @@ public class Endereco {
 		this.cep = cep;
 	}
 	
+	public Endereco(){
+		super();
+	}
+	
 	public String getEndereco() {
 		return endereco;
 	}

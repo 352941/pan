@@ -10,6 +10,10 @@ public class Estado {
 		this.nome = nome;
 	}
 	
+	public Estado() {
+		super();
+	}
+	
 	public Long getId() {
 		return id;
 	}

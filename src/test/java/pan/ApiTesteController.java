@@ -1,0 +1,117 @@
+package pan;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import br.com.bancopan.api.Application;
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class)
+@SpringBootTest
+public class ApiTesteController {
+	
+	private MockMvc mockMvc;
+	
+	@Autowired
+    private WebApplicationContext wac;
+
+	@Before
+	public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+	}
+
+
+	@Test
+	public void verifyUser() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/user/123").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.nome").exists())
+		.andExpect(jsonPath("$.cpf").value(123))
+		.andExpect(jsonPath("$.idade").exists())
+		.andExpect(jsonPath("$.estadoCivil").exists())
+		.andExpect(jsonPath("$.numero").exists())
+		.andExpect(jsonPath("$.telefone").exists())
+		.andDo(print())
+		;
+	}
+	
+	@Test
+	public void verifyUserNull() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/user/12").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.errorCode").value(404))
+		.andExpect(jsonPath("$.message").value("Cpf não existe"))
+		.andDo(print())
+		;
+	}
+	
+	@Test
+	public void verifyUpdateUser() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.put("/bancopan/api/user/update")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{ \"cpf\": 123, \"endereço\" : \"rua teste\", \"numero\" : 20 }")
+        .accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.status").value(200))
+		.andExpect(jsonPath("$.message").value("cpf atualizado com sucesso"))
+		.andDo(print())
+		;
+	}
+	
+	@Test
+	public void verifyEndereco() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/endereco/1").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.cep").exists())
+		.andExpect(jsonPath("$.endereco").value("Rua x"))
+		.andDo(print())
+		;
+	}
+	
+	@Test
+	public void verifyEnderecoNull() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/endereco/6").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.errorCode").value(404))
+		.andExpect(jsonPath("$.message").value("nao existe um endereco para o Cep informado"))
+		.andDo(print())
+		;
+	}
+	
+	@Test
+	public void verifyMunincipios() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado/municipios/1").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.idEstado").value(1))
+		.andExpect(jsonPath("$.listaMunicipios").exists())
+		.andDo(print());
+	}
+	
+	@Test
+	public void verifyMunincipiosNull() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado/municipios/4").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.errorCode").value(404))
+		.andExpect(jsonPath("$.message").value("Não existe municipios para o ID informado"))
+		.andDo(print())
+		;
+	}
+
+	@Test
+	public void verifyEstados() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado").accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].id").value(1))
+		.andExpect(jsonPath("$[0].nome").value("Sao Paulo"))
+		.andExpect(jsonPath("$[1].id").value(2))
+		.andExpect(jsonPath("$[1].nome").value("Rio de Janeiro"))
+		.andDo(print())
+		;
+	}
+}
