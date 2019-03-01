@@ -34,8 +34,9 @@ public class ApiTesteControllerIT {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	}
 
+	
 	/**
-	 * 
+	 * Executa um teste da API buscando o usuario de CPF 123
 	 * @throws Exception
 	 */
 
@@ -52,6 +53,10 @@ public class ApiTesteControllerIT {
 		;
 	}
 	
+	/**
+	 * Executa um teste da API buscando o usuario de CPF inexistente
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyUserNull() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/user/12").accept(MediaType.APPLICATION_JSON))
@@ -61,6 +66,10 @@ public class ApiTesteControllerIT {
 		;
 	}
 	
+	/**
+	 * Executa um teste da API atualizando o endereço do usuario de CPF 123
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyUpdateUser() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.put("/bancopan/api/user/update")
@@ -73,6 +82,10 @@ public class ApiTesteControllerIT {
 		;
 	}
 	
+	/**
+	 * Executa um teste da API buscando o endereço do cep 04417-010
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyEndereco() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/endereco/04417-010").accept(MediaType.APPLICATION_JSON))
@@ -82,25 +95,37 @@ public class ApiTesteControllerIT {
 		;
 	}
 	
+	/**
+	 * Executa um teste da API buscando o endereço de um cep inexistente
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyEnderecoNull() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/endereco/6").accept(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.errorCode").value(404))
-		.andExpect(jsonPath("$.message").value("nao existe um endereco para o Cep informado"))
+		.andExpect(jsonPath("$.message").value("CEP invalido"))
 		.andDo(print())
 		;
 	}
 
+	/**
+	 * Executa um teste da API buscando os municipios do estado de id 35.
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyMunincipios() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado/municipios/35").accept(MediaType.APPLICATION_JSON))
-		//.andExpect(jsonPath("$.idEstado").value(1))
-		//.andExpect(jsonPath("$.listaMunicipios").exists())
+		.andExpect(jsonPath("$[0].id").value(3500105))
+		.andExpect(jsonPath("$[0].nome").value("Adamantina"))
 		.andDo(print());
 	}
 	
+	/**
+	 * Executa um teste da API buscando os municipios de um estado inexistente
+	 * @throws Exception
+	 */
 	@Test
-	public void verifyMunincipiosNull() throws Exception {
+	public void verifyMunicipiosNull() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado/municipios/4").accept(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.errorCode").value(404))
 		.andExpect(jsonPath("$.message").value("Não existe municipios para o ID informado"))
@@ -108,6 +133,10 @@ public class ApiTesteControllerIT {
 		;
 	}
 
+	/**
+	 * Executa um teste da API buscando a lista de estados
+	 * @throws Exception
+	 */
 	@Test
 	public void verifyEstados() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/bancopan/api/estado").accept(MediaType.APPLICATION_JSON))
@@ -118,5 +147,4 @@ public class ApiTesteControllerIT {
 		.andDo(print())
 		;
 	}
-
 }

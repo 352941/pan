@@ -27,6 +27,12 @@ public class UserController {
     @Autowired
     private UserService userService;
     
+    /**
+     * API que busca a retorna as informações do usuario de acordo com o CPF
+     * @param cpf
+     * @return ResponseEntity<User>
+     * @throws Exception
+     */
     @RequestMapping(path = "/{cpf}", method = RequestMethod.GET)
     public ResponseEntity<User> findUser(@PathVariable Long cpf) throws Exception {
     	logger.info("retornando as informações do usuario do cpf : " + cpf);
@@ -38,7 +44,13 @@ public class UserController {
     	
     	return new ResponseEntity<User> (userService.findUser(cpf), HttpStatus.OK);
     }
-
+    
+    /**
+     * API que atualiza a informações de endereço do usuario
+     * @param user
+     * @return ResponseEntity<Response>
+     * @throws Exception
+     */
     @RequestMapping(path = "/update", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Response> updateUser(@Valid @RequestBody User user) throws Exception {
     	logger.info("atualizando as informações do usuario do cpf : " + user.getCpf());

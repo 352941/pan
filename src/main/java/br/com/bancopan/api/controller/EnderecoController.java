@@ -23,13 +23,20 @@ public class EnderecoController {
 	@Autowired
 	private EnderecoService enderecoService;
 
+	/**
+	 * API que retorna as informações do endereço de acordo com o CEP de entrada.
+	 * @param cep
+	 * @return ResponseEntity<Endereco>
+	 * @throws Exception
+	 */
     @RequestMapping(path = "/{cep}", method = RequestMethod.GET)
-    public ResponseEntity<Endereco> findEndereco(@PathVariable String cep) throws Exception {
+    public Endereco findEndereco(@PathVariable String cep) throws Exception {
     	logger.info("retornando o endereço do cep : " + cep);
-    	Endereco endereco = enderecoService.findEndereco(cep);
-    	if (endereco == null || endereco.getCep() == null) {
-    		throw new ApiException("nao existe um endereco para o Cep informado");
+    	
+    	if (cep == null || cep.isEmpty() || !cep.matches("\\d{5}-\\d{3}")) {
+    		throw new ApiException("CEP invalido");
     	}
-    	return new ResponseEntity<Endereco>(enderecoService.findEndereco(cep), HttpStatus.OK);
+    	
+    	return enderecoService.findEndereco(cep);
     }
 }
