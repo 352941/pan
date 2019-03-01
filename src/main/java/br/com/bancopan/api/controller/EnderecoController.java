@@ -24,7 +24,7 @@ public class EnderecoController {
 	private EnderecoService enderecoService;
 
     @RequestMapping(path = "/{cep}", method = RequestMethod.GET)
-    public ResponseEntity<Endereco> findEndereco(@PathVariable Long cep) throws Exception {
+    public ResponseEntity<Endereco> findEndereco(@PathVariable String cep) throws Exception {
     	logger.info("retornando o endereço do cep : " + cep);
     	Endereco endereco = enderecoService.findEndereco(cep);
     	if (endereco == null || endereco.getCep() == null) {

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.bancopan.api.model.Estado;
-import br.com.bancopan.api.model.EstadoMunicipio;
-import br.com.bancopan.api.services.EstadoService;
 import br.com.bancopan.api.exception.ApiException;
+import br.com.bancopan.api.model.Estado;
+import br.com.bancopan.api.model.Municipios;
+import br.com.bancopan.api.services.EstadoService;
 
 @RestController
 @RequestMapping("bancopan/api/estado")
@@ -34,12 +34,12 @@ public class EstadosController {
     }
     
     @RequestMapping(path = "/municipios/{idEstado}", method = RequestMethod.GET)
-    public ResponseEntity<EstadoMunicipio> findUser(@PathVariable Long idEstado) throws Exception {
+    public ResponseEntity<Iterable<Municipios>> findUser(@PathVariable Long idEstado) throws Exception {
     	logger.info("retornando todos os municipios do estado de id : " + idEstado);
-    	EstadoMunicipio estadoMuni = estadoService.findMunicipio(idEstado);
-    	if (estadoMuni == null || estadoMuni.getIdEstado() == null) {
+    	Iterable<Municipios> listMunicipios = estadoService.findMunicipio(idEstado);
+    	if (listMunicipios == null) {
     		throw new ApiException("Não existe municipios para o ID informado");
     	}
-    	return new ResponseEntity<EstadoMunicipio>(estadoService.findMunicipio(idEstado), HttpStatus.OK);
+    	return new ResponseEntity<Iterable<Municipios>>(listMunicipios, HttpStatus.OK);
     }
 }

@@ -1,19 +1,13 @@
 package br.com.bancopan.api.model;
 
-public class Estado {
-	
+public class Uf {
+
 	private Long id;
 	private String nome;
 	private String sigla;
 	private Regiao regiao;
-
-	public Estado(Long id, String nome) {
-		this.id = id;
-		this.nome = nome;
-		this.regiao = new Regiao();
-	}
 	
-	public Estado() {
+	public Uf() {
 		super();
 		this.regiao = new Regiao();
 	}
@@ -46,5 +40,4 @@ public class Estado {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
 }

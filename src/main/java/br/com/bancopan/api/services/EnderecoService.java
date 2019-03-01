@@ -1,46 +1,26 @@
 package br.com.bancopan.api.services;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import br.com.bancopan.api.model.Endereco;
 
 @Service
 public class EnderecoService {
-
-	List<Endereco> listaEndereco =  new ArrayList<Endereco>();
 	
-	@PostConstruct
-	public void init() {
-		
-        listaEndereco.add(new Endereco((long)1,"Rua x"));
-        listaEndereco.add(new Endereco((long)2,"Rua y"));
-        listaEndereco.add(new Endereco((long)3,"Rua z"));
-        listaEndereco.add(new Endereco((long)4,"Rua w"));
-        
-	}
-	
-    public Endereco findEndereco(Long cep) {
+	/**
+	 * Metodo que recebe o cep como parametro de entrada e retorna o endereço executando a API do viacep.
+	 * @param cep
+	 * @return Endereco ou NULL caso não localize o endereço.
+	 */
+    public Endereco findEndereco(String cep) {
        
         Endereco endereco = new Endereco();
-
-        Iterator<Endereco> aux = listaEndereco.iterator();
         
-        while(aux.hasNext()) {
-        	
-        	Endereco end = aux.next();
-        	if (end.getCep().equals(cep)) {
-        		endereco = end;
-        		break;
-        	}
-
-        }
-        
+        RestTemplate restTemplate = new RestTemplate();
+    	
+        endereco = restTemplate.getForEntity("https://viacep.com.br/ws/" + cep +"/json",
+    			Endereco.class).getBody();
         return endereco;
     }
     
